@@ -13,12 +13,12 @@
 
 С npm:
 ```sh
-npm install smsaero
+npm install smsaero-node
 ```
 
 С yarn:
 ```sh
-yarn add smsaero
+yarn add smsaero-node
 ```
 
 ## Использование
