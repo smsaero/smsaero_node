@@ -26,7 +26,7 @@ yarn add smsaero-node
 Во-первых, импортируйте класс SmsAero и связанные с ним классы ошибок из модуля:
 
 ```javascript
-const { SmsAero, SmsAeroError, SmsAeroHTTPError } = require('smsaero');
+const { SmsAero, SmsAeroError, SmsAeroHTTPError } = require('smsaero-node');
 ```
 
 Вы можете создать экземпляр клиента SmsAero, используя свою электронную почту, ключ API и другие параметры конфигурации:
