@@ -1,0 +1,26 @@
+{
+  "name": "smsaero-node",
+  "version": "1.0.0",
+  "description": "Этот модуль Node.js разработан для взаимодействия с API SmsAero. Он включает в себя различные функции для отправки SMS-сообщений, проверки статуса сообщений, получения списка сообщений, а также управления контактами и группами.",
+  "main": "smsaero.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smsaero/smsaero_class-node.git"
+  },
+  "keywords": [
+    "smsaero",
+    "node",
+    "class",
+    "messaging",
+    "sms"
+  ],
+  "author": "BraindeadDogge",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/smsaero/smsaero_class-node/issues"
+  },
+  "homepage": "https://github.com/smsaero/smsaero_class-node#readme"
+}
