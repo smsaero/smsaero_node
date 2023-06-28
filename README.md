@@ -1,4 +1,4 @@
-# smsaero_class-node
+# SMS Aero class for node
 
 ```markdown
 # Клиент SmsAero для Node.js
