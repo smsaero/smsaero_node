@@ -5,34 +5,76 @@ class SmsAero {
 		email,
 		apiKey,
 		signature = "Sms Aero",
-		urlGate = "@gate.smsaero.ru/v2/",
+		gateURLs = [
+			"@gate.smsaero.ru/v2/",
+			"@gate.smsaero.org/v2/",
+			"@gate.smsaero.net/v2/",
+			"@gate.smsaero.uz/v2/",
+		],
 		typeSend = 2
 	) {
 		this.email = email;
 		this.apiKey = apiKey;
-		this.urlGate = `https://${encodeURIComponent(email)}:${apiKey}${urlGate}`;
+		this.gateURLs = gateURLs.map(
+			(url) => `${encodeURIComponent(email)}:${apiKey}${url}`
+		);
+		this.proto = "https";
+		this.currentURLIndex = 0; // Start with the first URL
 		this.signature = signature;
 		this.typeSend = typeSend;
 		this.session = axios.create();
 	}
 
+	get currentURLGate() {
+		return this.gateURLs[this.currentURLIndex];
+	}
+
 	async _request(selector, data = {}, page = null) {
-		const url = new URL(selector, this.urlGate);
+		const urlBase = `${this.proto}://${this.currentURLGate}`;
+
+		let retryWithHTTP = false;
+
+		const url = new URL(selector, urlBase);
 		if (page) {
 			url.searchParams.set("page", page);
 		}
-    
-		try {
-			const response = await this.session.post(url.toString(), data, {
-				auth: {
-					username: this.email,
-					password: this.apiKey,
-				},
-			});
-			return this._checkResponse(response.data);
-		} catch (err) {
-      console.log(err.response)
-			throw new SmsAeroHTTPError(err);
+
+		for (let i = 0; i < this.gateURLs.length; i++) {
+			try {
+				const response = await this.session.post(url.toString(), data, {
+					auth: {
+						username: this.email,
+						password: this.apiKey,
+					},
+				});
+				this.currentURLIndex = 0; // Reset to the primary URL after a successful request
+				return this._checkResponse(response.data);
+			} catch (err) {
+				if (err.code === "EPROTO") {
+					// SSL related error
+					this.proto = "http";
+					retryWithHTTP = true;
+					i--; // Decrement the index to retry with the same URL gate but with http protocol
+					continue;
+				}
+				// If it's the last URL or the error isn't related to connectivity, throw the error
+				if (
+					i === this.gateURLs.length - 1 ||
+					(err.response &&
+						err.response.status < 500 &&
+						err.response.status !== 429)
+				) {
+					console.log(err.response);
+					throw new SmsAeroHTTPError(err);
+				}
+
+				if (!retryWithHTTP) {
+					this.currentURLIndex =
+						(this.currentURLIndex + 1) % this.gateURLs.length;
+				} else {
+					retryWithHTTP = false; // Reset the flag for the next iteration
+				}
+			}
 		}
 	}
 
