@@ -317,6 +317,25 @@ class SmsAero {
 	flashcallStatus(pk) {
 		return this._request("flashcall/status", {id: pk});
 	}
+
+	async sendTelegram(number, code, sign = null, text = null) {
+		const [num, phoneNumber] = SmsAero._getNumber(number);
+		const data = {
+			[num]: phoneNumber,
+			code: Number(code),
+		};
+		if (sign !== null) {
+			data.sign = sign;
+		}
+		if (text !== null) {
+			data.text = text;
+		}
+		return this._request("telegram/send", data);
+	}
+
+	telegramStatus(telegramId) {
+		return this._request("telegram/status", {id: Number(telegramId)});
+	}
 }
 
 class SmsAeroError extends Error {

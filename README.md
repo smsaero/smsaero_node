@@ -44,6 +44,16 @@ client.send('1234567890', 'Привет, мир!')
   .then(response => console.log(response))
   .catch(error => console.error(error));
 
+// Отправка Telegram кода
+client.sendTelegram('1234567890', 1234, 'SMS Aero', 'Ваш код 1234')
+  .then(response => console.log(response))
+  .catch(error => console.error(error));
+
+// Проверка статуса Telegram сообщения
+client.telegramStatus(1)
+  .then(response => console.log(response))
+  .catch(error => console.error(error));
+
 // Проверка баланса
 client.balance()
   .then(response => console.log(response))
