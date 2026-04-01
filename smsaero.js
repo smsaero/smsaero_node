@@ -336,6 +336,23 @@ class SmsAero {
 	telegramStatus(telegramId) {
 		return this._request("telegram/status", {id: Number(telegramId)});
 	}
+
+	sendMobileId(number, callbackUrl) {
+		const data = {number: String(number), sign: this.signature, callbackUrl: callbackUrl};
+		return this._request("mobile-id/send", data);
+	}
+
+	mobileIdStatus(reqId) {
+		return this._request("mobile-id/status", {id: Number(reqId)});
+	}
+
+	verifyMobileId(reqId, code) {
+		return this._request("mobile-id/verify", {
+			id: Number(reqId),
+			code: String(code),
+			sign: this.signature,
+		});
+	}
 }
 
 class SmsAeroError extends Error {
