@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [2.2.1]
+
+### Fixed
+- Restrict published package contents with `files` in `package.json` (excludes `.idea`, local scripts, and other non-library files).
+
 ## [2.2.0]
 
 ### Added
